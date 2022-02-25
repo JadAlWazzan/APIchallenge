@@ -1,0 +1,297 @@
+/* Reset */
+
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em,
+img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, hr,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figure, figcaption, hgroup,
+menu, footer, header, nav, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+article, aside, canvas, figure, figure img, figcaption,
+footer, header, nav, section, audio, video {
+    display: block;
+}
+
+::selection                  {background: rgb(255,255,158);}
+::-moz-selection         {background: rgb(255,255,158);}
+img::selection                 {background: transparent;}
+img::-moz-selection        {background: transparent;}
+body {-webkit-tap-highlight-color: rgb(255,255,158);}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+:invalid {
+    box-shadow: none;
+}
+
+:-moz-submit-invalid {
+    box-shadow: none;
+}
+
+:-moz-ui-invalid {
+    box-shadow:none;
+}
+
+body {
+    min-width: 896px;
+    padding: 72px 48px 84px;
+    background: rgb(232,232,232);
+    color: rgb(60,60,60);
+}
+
+/* Css for HTML elements */
+
+h1 {
+    font-size: 68px;
+    line-height: 72px;
+    letter-spacing: -1px;
+}
+
+h2 {
+    display: inline;
+    font-size: 42px;
+    line-height: 48px;
+}
+
+h3 {
+    font-size: 26px;
+    line-height: 36px;
+}
+
+h4 {
+    font-size: 22px;
+    line-height: 30px;
+}
+
+html, body {
+    height: 100%;
+    font: 16px/24px Arial, sans-serif;
+}
+
+small {
+    font-size: 13px;
+    line-height: 18px;
+}
+
+nav {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+button {
+    color: white;
+    background: #d50000;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    cursor: pointer;
+    border:1px solid #000000;
+}
+
+button:hover, button:active {
+    background: #008cb5;
+    border: 1px solid #008cb5;
+}
+
+input {
+    border: 1px solid #00a5d5;
+    /* padding: 3px; */
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.hide {
+    display: none;
+}
+
+.visible{
+    opacity: 1;
+    visibility: visible;
+}
+
+.fade_hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#title:visited, #title:link, #title:hover {
+    color: #000000;
+    text-decoration: none;
+    position: absolute;
+    bottom:0;
+}
+
+#header {
+    position: relative;
+}
+
+#content {
+    padding-top: 1em;
+    height: 100%;
+}
+
+/* CSS for Table content */
+
+#show_button, #add_button {
+    margin-left: 0.5em;
+}
+
+#show_form label {
+    color:#000000;
+    font: 12px/24px Arial, sans-serif;
+}
+
+#add_message {
+    margin-left: 0.5em;
+    color:#000000;
+    transition: opacity 10s ease, visibility 10s ease;
+    font: 12px/24px Arial, sans-serif;
+}
+
+#trans_con {
+    height: 100%;
+}
+
+#forms {
+    max-height: 24px;
+    margin-bottom: 0.5em;
+}
+
+#table_con {
+    height: 305px;
+    background: #ffffff;
+    border: 1px solid #d50000;
+    overflow: hidden;
+}
+
+#trans_table {
+    height: 600px;
+    width: 100%;
+}
+
+ #trans_table thead, #trans_table tbody, #trans_table tr,
+ #trans_table td, #tans_table th {
+     display: block;
+ }
+
+#trans_table tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+#trans_body tr:nth-child(even){
+    background: #eee898;
+    color: rgb(0, 0, 0);
+    opacity: 0.9;
+}
+
+#trans_body tr:nth-child(odd){
+    background: white;
+    color: #000000;
+}
+#trans_table thead th {
+    height: 30px;
+    line-height: 30px;
+    background: #d50000;
+    color: white;
+    font: 16px/30px Arial, sans-serif;
+}
+
+#trans_table tbody {
+    height: 300px;
+    overflow-y: auto;
+}
+
+#trans_table thead {
+    width: 100%;
+}
+
+#trans_table tbody td, #trans_table thead th {
+    width: 25%;
+    float: left;
+    text-align: center;
+}
+
+#trans_table tbody td {
+    font: 12px/24px Arial, sans-serif;
+}
+
+/*CSS for message box to be displayed in the table*/
+
+#message {
+    color: red;
+    font: 12px Arial, sans-serif;
+}
+
+#message_row {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+#message_row td {
+    height: 100% !important;
+    width: 100% !important;
+    position: relative;
+}
+
+#message_row td div {
+    position: absolute;
+    height: 75% !important;
+    width: 100% !important;
+    display: table;
+}
+
+#message_row td div p {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+/* Loading animations*/
+
+/* @-webkit-keyframes opacity {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+@-moz-keyframes opacity {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+#loading {
+    text-align: center;
+}
+
+#loading span {
+    -webkit-animation-name: opacity;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-name: opacity;
+    -moz-animation-duration: 1.5s;
+    -moz-animation-iteration-count: infinite;
+}
+
+#loading span:nth-child(2) {
+    -webkit-animation-delay: 200ms;
+    -moz-animation-delay: 200ms;
+}
+
+#loading span:nth-child(3) {
+    -webkit-animation-delay: 300ms;
+    -moz-animation-delay: 300ms;
+} */
