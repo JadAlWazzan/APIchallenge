@@ -8,7 +8,7 @@
 <body>
     <div id="header">
         <a id="title" href="/">
-            <h2><strong>Expensify</strong> - Jad's Edition</h2>
+            <h2><strong>Expensify</strong> - Expenses Made Easy</h2>
         </a>
         <nav class="hide">
             <span id="username"></span> | <button type="button" id="logout">Logout</button>
@@ -33,11 +33,10 @@
                 </tr>
             </thead>
  
-            <tbody class="hide" id="transactionTableBody">
+            <tbody id="transactionTableBody">
                 <!-- Add the transaction rows here -->
                 <?php
                 require_once 'table.php';
-                //require_once "transactions.php";
                 ?>
             </tbody>
         </table>
@@ -46,7 +45,6 @@
         <!-- Add your create transaction form here -->
         <?php
         require_once 'table.php';
-        //require_once "add_transactions.php"
         ?>
        
     </div>

@@ -1,4 +1,4 @@
-<div class="hide" id="trans_con">
+<div class="hide" id="transactions_content">
     <div id="forms">
         <span id="buttons">
             <button id="add_trans">Add</button> | <button id="see_more">See More</button>
@@ -17,9 +17,9 @@
                         <td>
                             <input required type="text" name="merchant" placeholder="Merchant" />
                         </td>
-                        <td>
+                        <!-- <td>
                             <input type="text" name="comment" placeholder="Details" />
-                        </td>
+                        </td> -->
                         <td>
                             <button type="submit" id="add_button">Add</button>
                             <button type="reset">Reset</button>
@@ -46,7 +46,7 @@
                             </td>
                             <td>
                                 <button type="submit" id="show_button">Show</button>
-                                <button type="button" id="show_all">Show All</button>
+                                <button type="button" id="show_ThisMonth">Show This Month</button>
                                 <button type="button" id="cancel_show">Cancel</button>
                             </td>
                         </tr>
@@ -56,7 +56,8 @@
     </div>
     <div id="table_con">
         <table id="trans_table">
-            <thead><tr><th>Date</th><th>Amount</th><th>Merchant</th><th>Details</th></tr></thead>
+            <thead><tr><th>Date</th><th>Amount</th><th>Merchant</th></tr></thead>
+            <!-- <th>Details</th> -->
             <tbody id="trans_body">
             </tbody>
         </table>

@@ -112,8 +112,8 @@ Form.prototype.ajaxifySubmit = function(responseHandler, before) {
 // The app code is made up of modules that encapsulate the functionalities 
 
 
-// AppTools -- module that encapsulates all application specific code used in other application modules
-function AppTools(){
+// appMod -- module that encapsulates all application specific code used in other application modules
+function appMod(){
     function errorInvalidInput(){
         alert("Invalid user input. Try again!");
     }
@@ -142,13 +142,13 @@ function AppTools(){
         var errorCode = Number(error.jsonCode);
         switch(errorCode){
             case 401:
-                message = "Wrong password.";
+                message = "Wrong password, Please try again.";
                 break;
             case 404:
-                message = "Account not found.";
+                message = "Account not found, Please try again.";
                 break;
-            case 405:
-                message = "Unvalidated email address.";
+            case 407:
+                message = "AuthToken expired, please login again.";
                 break;
         }
         errorElmt.innerHTML = message;
@@ -231,14 +231,14 @@ function AppTools(){
     // for the display of monetary amounts
     function parseMoney(string){
         if (string) {
-            var temp = Number(string);
-            if ( temp < 0){
-                temp = Math.abs(temp);
-                temp = "-$" + temp;
-                return temp;
+            var amount = Number(string)/100;
+            if ( amount < 0){
+                amount = Math.abs(amount);
+                amount = "-$" + amount;
+                return amount;
             }
             else {
-                return "$" + temp;
+                return "$" + amount;
             }
         }
         return "void";
@@ -258,8 +258,9 @@ function AppTools(){
 //      the portion of the application that
 //      is devoted to displaying and creating
 //      user transactions
+
 function Transactions(Table, Adder){
-    var containerElmt = document.getElementById("trans_con");
+    var containerElmt = document.getElementById("transactions_content");
     function showTransactions(){
         if(containerElmt){
             containerElmt.classList.toggle("hide");
@@ -274,13 +275,13 @@ function Transactions(Table, Adder){
 
 // Table -- encapsulates the portion of the app
 //          that displays transactions
-function Table(AppTools){
+function Table(appMod){
     var bodyElmt = document.getElementById("trans_body");
     var formElmt = document.getElementById("show_form");
     var form = new Form(formElmt);
     var moreButtonElmt = document.getElementById("see_more");
     var cancelButtonElmt = document.getElementById("cancel_show");
-    var showAllButtonELmt = document.getElementById("show_all");
+    var showMonthButtonELmt = document.getElementById("show_ThisMonth");
     function clearTable(){
         $(bodyElmt).children().remove();
     }
@@ -289,6 +290,16 @@ function Table(AppTools){
     //pass to an ajax call requesting transactions
     //from the current month. function puts date into
     //this date into YYYY-MM-DD format
+    function all_TransactionsHistory(){
+        var start = ("1900" + '-' + "01" + '-' + '01');
+        var end= ("2999" + '-' + "12" + '-' + "31");
+        return {
+            command: "Get",
+            returnValueList: "transactionList",
+            startDate: start,
+            endDate: end
+        };
+    }
     function currentMonthParams(){
         var currentdate_date = new Date();
         var month = currentdate_date.getMonth()+1;
@@ -305,6 +316,7 @@ function Table(AppTools){
             endDate: end
         };
     }
+
     // function displays a string into a message box
     // in the center of the transactions table body
     function insertTableMessage(message){
@@ -320,7 +332,7 @@ function Table(AppTools){
     // function inserts html string into the message
     function dataLoading(){
         clearTable();
-        var htmlString = "<p id='loading'>Loading<span>.</span><span>.</span><span>.</span></p>";
+        var htmlString = "<p id='loading'>Loading Data, Please wait...</p>";
         insertTableMessage(htmlString);
     }
     // function loads a single transaction into a table
@@ -333,18 +345,18 @@ function Table(AppTools){
         var row = document.createElement("tr");
         tableBody.appendChild(row);
         var date_cell = document.createElement("td");
-        date_cell.innerHTML = AppTools.readifyUTCDate(transaction.created);
+        date_cell.innerHTML = appMod.readifyUTCDate(transaction.created);
         row.appendChild(date_cell);
         var amount_cell = date_cell.cloneNode(false);
         console.log(!transaction.amount);
-        amount_cell.innerHTML = AppTools.parseMoney(transaction.amount);
+        amount_cell.innerHTML = appMod.parseMoney(transaction.amount);
         row.appendChild(amount_cell);
         var merchant_cell = date_cell.cloneNode(false);
         merchant_cell.innerHTML = transaction.merchant;
         row.appendChild(merchant_cell);
-        var comment_cell = date_cell.cloneNode(false);
-        comment_cell.innerHTML = transaction.comment;
-        row.appendChild(comment_cell);
+        // var comment_cell = date_cell.cloneNode(false);
+        // comment_cell.innerHTML = transaction.comment;
+        // row.appendChild(comment_cell);
     }
     // functions loads response data received from
     // ajax call to API into tables
@@ -359,37 +371,40 @@ function Table(AppTools){
             var message = "No transactions to show.";
             console.log(params);
             if (params.startDate && params.endDate){
-                var startDate = AppTools.readifyUTCDate(params.startDate);
-                var endDate = AppTools.readifyUTCDate(params.endDate);
+                var startDate = appMod.readifyUTCDate(params.startDate);
+                var endDate = appMod.readifyUTCDate(params.endDate);
                 message = "No transactions in the period " + startDate + " – " + endDate + ".";
             }
             insertTableMessage("<p>" + message + "</p>");
         }
         transactions.forEach(addTransaction.bind(undefined, bodyElmt));
     }
-    var showAllHandler = AppTools.formHandler(showSuccessConstructor).bind(undefined, null);
-    var showAllParams = { command: "Get", returnValueList: "transactionList" };
-    // binds handler to click event on showAll button
-    function showAllButtonBehavior(){
-        ajaxJSON("get_proxy.php", showAllParams, showAllHandler, dataLoading);
+    var showMonthHandler = appMod.formHandler(showSuccessConstructor).bind(undefined, null);
+    var showMonthParams = currentMonthParams();
+    
+    // binds handler to click event on showMonth button
+    function showMonthButtonBehavior(){
+        ajaxJSON("get_proxy.php", showMonthParams, showMonthHandler, dataLoading);
     }
     function configTable(){
         // attach event handler to see more and cancel buttons
         $([moreButtonElmt, cancelButtonElmt]).on("click", function (event){
             console.log(event.target);
-            AppTools.cancelAddButtonBehavior(formElmt);
+            appMod.cancelAddButtonBehavior(formElmt);
         });
         // show the current month's transactions
-        var formHandler = AppTools.formHandler(showSuccessConstructor);
+        var formHandler = appMod.formHandler(showSuccessConstructor);
         // set handler for form submission that fetches user transactions
         form.ajaxifySubmit(formHandler, dataLoading);
         // configure the transactions display table
-        $(showAllButtonELmt).on("click", showAllButtonBehavior);
-        var currentMonth = currentMonthParams();
-        var currentMonthHandler = formHandler.bind(undefined, currentMonth);
+        $(showMonthButtonELmt).on("click", showMonthButtonBehavior);
+        //var currentMonth = currentMonthParams();
+        //var currentMonthHandler = formHandler.bind(undefined, currentMonth);
+        var allTransactionsHistory = all_TransactionsHistory();
+        var allTransactionsHistoryHandler = formHandler.bind(undefined, allTransactionsHistory);
         // on initial page load, get this month's transactions and display them
-        ajaxJSON("get_proxy.php", currentMonth, currentMonthHandler, dataLoading);
-
+        //ajaxJSON("get_proxy.php", currentMonth, currentMonthHandler, dataLoading);
+        ajaxJSON("get_proxy.php", allTransactionsHistory, allTransactionsHistoryHandler, dataLoading);
     }
     return {
         config: configTable,
@@ -399,21 +414,21 @@ function Table(AppTools){
 // Adder -- Module that encapsulates the portion
 //          of the application that adds transactions
 //          to a user's account
-function  Adder(AppTools){
+function  Adder(appMod){
     var formElmt = document.getElementById("add_form");
     var addButtonElmt = document.getElementById("add_trans");
     var cancelButtonElmt = document.getElementById("cancel_add");
     var form = new Form(formElmt);
     var userFeedbackElmt = document.getElementById("add_message");
     function addSuccessHandler(params, response){
-        AppTools.fadeOutElmt(userFeedbackElmt, 3000);
+        appMod.fadeOutElmt(userFeedbackElmt, 3000);
         console.log("transaction added");
     }
-    var formHandler = AppTools.formHandler(addSuccessHandler);
+    var formHandler = appMod.formHandler(addSuccessHandler);
     function configAdder(){
         // attach behavior to add transaction and cancel buttons
         $([addButtonElmt, cancelButtonElmt]).on("click", function (event){
-            AppTools.cancelAddButtonBehavior(formElmt);
+            appMod.cancelAddButtonBehavior(formElmt);
         });
         // set handlers for form submission for fetching user transactions
         form.ajaxifySubmit(formHandler);
@@ -427,11 +442,11 @@ function  Adder(AppTools){
 // NavBar -- module that encapsulates the portion
 //      of the application that comprises and
 //      handles the navigation bar
-function NavBar(AppTools){
+function NavBar(appMod){
     var navElmt = document.getElementsByTagName("nav")[0];
     var usernameElmt = document.getElementById("username");
     var logoutButton = document.getElementById("logout");
-    var logoutButtonBehavior = AppTools.logoutUser;
+    var logoutButtonBehavior = appMod.logoutUser;
     function configNavBar(email){
         var username = email || getCookieValue("email");
         navElmt.classList.toggle("hide");
@@ -447,7 +462,7 @@ function NavBar(AppTools){
 // Login -- module that encapsulates the portion of
 //          of the application that handles user
 //          authentication
-function Login(Transactions, NavBar, AppTools){
+function Login(Transactions, NavBar, appMod){
     var containerElmt = document.getElementById("login_con");
     var formElmt = document.getElementById("login_form");
     var messageElmt  = document.getElementById("message");
@@ -464,8 +479,9 @@ function Login(Transactions, NavBar, AppTools){
         Transactions.show();
         Transactions.Table.config();
         Transactions.Adder.config();
+        
     }
-    var formHandler = AppTools.formHandler(loginSuccessHandler, messageElmt);
+    var formHandler = appMod.formHandler(loginSuccessHandler, messageElmt);
     function configLogin(){
         form.ajaxifySubmit(formHandler);
     }
@@ -482,7 +498,7 @@ function Login(Transactions, NavBar, AppTools){
 $(document).ready(function (){
     var authToken = getCookieValue("authToken");
     // load up modules
-    var apptools = AppTools();
+    var apptools = appMod();
     var transactions = Transactions(Table(apptools), Adder(apptools));
     var navbar = NavBar(apptools);
     var login = Login(transactions, navbar, apptools);
