@@ -5,7 +5,7 @@ function getResponseHeaders($response, $header_size) {
     return $headers;
 }
 // function proxies an asynchronous request to the API
-// via the curl library
+// curl library
 function proxyRequest($url){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

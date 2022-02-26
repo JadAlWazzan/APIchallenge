@@ -1,6 +1,7 @@
-// Script 
+// Script for Expensify WebApp 
 
-// A function that makes an ajax call to the expensify API
+// A function that makes the ajax call to the expensify API
+
 function ajaxJSON(url, params, callback, before){
     $.ajax({
         beforeSend: before,
@@ -10,6 +11,7 @@ function ajaxJSON(url, params, callback, before){
         success: function(data) {
             callback(data);
         },
+        //Added this to check status of site after the site was down 
         error: function(jqXHR, clientStatus, httpStatus){
             if (clientStatus){
                 console.log(clientStatus);
@@ -55,11 +57,12 @@ function getCookieValue(cookie_name) {
             return cookie.substring(cookie_name_eq.length,cookie.length);
         }
     }
-    // otherwise return null
+    // otherwise the return will be null
     return null;
 }
 
 // function resets cookie that expired 
+
 function deleteCookie(cookie_name) {
     createCookie(cookie_name, "", -1);
 }
@@ -78,6 +81,7 @@ function queryStringToJSON(qs) {
 //DOM
 
 // this class abstracts DOM form elements
+
 function Form(formElmt, errorElmt){
     if (!(this instanceof Form)){
         return new Form(formElmt, errorElmt);
@@ -86,6 +90,7 @@ function Form(formElmt, errorElmt){
 }
 
 // class method to ajaxify's form submission on a form
+
 Form.prototype.ajaxifySubmit = function(responseHandler, before) {
     var self = this;
     var formElmt = self.formElmt;
@@ -107,12 +112,11 @@ Form.prototype.ajaxifySubmit = function(responseHandler, before) {
 
 
 
-// Bellow code specific for APP
+// Bellow specific code for WEBAPP
 
 // The app code is made up of modules that encapsulate the functionalities 
+// appMod module --> encapsulates all application specific code used in other application modules
 
-
-// appMod -- module that encapsulates all application specific code used in other application modules
 function appMod(){
     function errorInvalidInput(){
         alert("Invalid user input. Try again!");
@@ -123,29 +127,23 @@ function appMod(){
     function errorServer(){
         alert("Oops! Expensify is experiencing some issues on their end. Try again later.");
     }
-    // function logs out the user by deleting the
-    // authentication cookie and refreshing the page
-    // so that the cookie actually get removed by
-    // the browser, this should also "redirect" to
-    // the login "page"
+    // function logs out the user by deleting the authentication cookie and redirecting him to the login page
     function logoutUser(){
         deleteCookie("authToken");
         location.reload(true);
     }
+
     // function that handles login json error codes
-    // Parameters:
-    //      error -- the error object return by the API call
-    //      errorElmt -- the inline element to contain the error
-    //          the login error message to be displayed
+
     function errorLogin(error, errorElmt){
         var message = "";
         var errorCode = Number(error.jsonCode);
         switch(errorCode){
             case 401:
-                message = "Wrong password, Please try again.";
+                message = "Wrong password, please try again.";
                 break;
             case 404:
-                message = "Account not found, Please try again.";
+                message = "Account not found, please try again.";
                 break;
             case 407:
                 message = "AuthToken expired, please login again.";
@@ -155,43 +153,15 @@ function appMod(){
     }
     // object that handles the default set of json error codes
     var errorCodeHandlers = {
-        // 400 unrecognized command
-        "400": errorInvalidInput,
-        // 401 incorrect password
+        // 401 Wrong password
         "401": errorLogin,
-        // 402 missing argument
-        "402": errorInvalidInput,
         // 404 account not found
         "404": errorLogin,
-        // 405 email not validated
-        "405": errorLogin,
-        // 407 malformed authToken
+        // 407 authToken expired
         "407": logoutUser,
-        // 408 authToken expired
-        "408": logoutUser,
-        // 411 Insufficient privileges
-        "411": errorPrivileges,
-        // 500 Aborted
-        "500": errorServer,
-        // 501 db transaction error
-        "501": errorServer,
-        // 502 query error
-        "502": errorServer,
-        // query response error
-        "503": errorServer,
-        // unrecognized object state
-        "504": errorServer,
     };
-    // higher order function that takes in a callback for
-    // a successful ajax form submission and the optional
-    // argument of an element to display errors to
-    // function return a callback function that handles
-    // the json code errors specific to the expensify API
-    // Parameters:
-    //          successCallback -- callback to be called on
-    //              successful ajax form submission
-    //          errorElmt -- inline DOM element to display error
-    //              messages to
+
+    // function that takes in a callback for a successful ajax form submission and the argument of an element to display errors 
     function expensifyFormHandler(successCallback, errorElmt){
         return function(params, data){
             if (data.jsonCode == "200"){
@@ -217,18 +187,15 @@ function appMod(){
         }, mils);
     }
     // function parses date in YYYY-MM-DD
-    // format and return a MM/DD/YYYY date
-    // Parameters:
-    //      UTCdate -- date in YYYY-MM-DD format
-    function readifyUTCDate(UTCdate){
+    function UTCDate(UTCdate){
         var array = UTCdate.split("-");
         var year = array[0];
         var month = array[1];
         var day = array[2];
-        return month + "/" + day + "/" + year;
+        return year + "-" + month + "-" + day;
     }
-    // function add $ sign in the right place
-    // for the display of monetary amounts
+    
+    // function of monetary amounts in CENTS 
     function parseMoney(string){
         if (string) {
             var amount = Number(string)/100;
@@ -240,13 +207,13 @@ function appMod(){
             else {
                 return "$" + amount;
             }
-        }
+        } 
         return "void";
     }
     // module exports
     return {
         parseMoney: parseMoney,
-        readifyUTCDate: readifyUTCDate,
+        UTCDate: UTCDate,
         fadeOutElmt: fadeOutElmt,
         cancelAddButtonBehavior: cancelAddButtonBehavior,
         logoutUser: logoutUser,
@@ -254,10 +221,7 @@ function appMod(){
     };
 }
 
-// Transaction -- module that abstracts
-//      the portion of the application that
-//      is devoted to displaying and creating
-//      user transactions
+// Transaction module devoted to displaying and creating user transactions
 
 function Transactions(Table, Adder){
     var containerElmt = document.getElementById("transactions_content");
@@ -273,8 +237,8 @@ function Transactions(Table, Adder){
     };
 }
 
-// Table -- encapsulates the portion of the app
-//          that displays transactions
+// Table // displays transactions
+
 function Table(appMod){
     var bodyElmt = document.getElementById("trans_body");
     var formElmt = document.getElementById("show_form");
@@ -285,11 +249,8 @@ function Table(appMod){
     function clearTable(){
         $(bodyElmt).children().remove();
     }
-    //function computes the current date
-    //and then return an params object to
-    //pass to an ajax call requesting transactions
-    //from the current month. function puts date into
-    //this date into YYYY-MM-DD format
+
+    //function to show all the transactions dates and then return a param object to pass to an ajax call requesting transactions
     function all_TransactionsHistory(){
         var start = ("1900" + '-' + "01" + '-' + '01');
         var end= ("2999" + '-' + "12" + '-' + "31");
@@ -300,6 +261,8 @@ function Table(appMod){
             endDate: end
         };
     }
+
+    //function gets the current date and then return a param object to pass to an ajax call requesting transactions from the current month
     function currentMonthParams(){
         var currentdate_date = new Date();
         var month = currentdate_date.getMonth()+1;
@@ -317,8 +280,8 @@ function Table(appMod){
         };
     }
 
-    // function displays a string into a message box
-    // in the center of the transactions table body
+    // function to displays a string into a box in the center of the transactions table body
+
     function insertTableMessage(message){
         var row = document.createElement("tr");
         var cell = document.createElement("td");
@@ -329,23 +292,20 @@ function Table(appMod){
         cell.appendChild(messageElmt);
         bodyElmt.appendChild(row);
     }
-    // function inserts html string into the message
+    // function inserts html string into the message while fetching DATA
+
     function dataLoading(){
         clearTable();
         var htmlString = "<p id='loading'>Loading Data, Please wait...</p>";
         insertTableMessage(htmlString);
     }
     // function loads a single transaction into a table
-    // Parameters:
-    //      transaction -- json object populated with
-    //          transaction data
-    //      table -- DOM table element that displays
-    //          transaction data
+
     function addTransaction(tableBody, transaction){
         var row = document.createElement("tr");
         tableBody.appendChild(row);
         var date_cell = document.createElement("td");
-        date_cell.innerHTML = appMod.readifyUTCDate(transaction.created);
+        date_cell.innerHTML = appMod.UTCDate(transaction.created);
         row.appendChild(date_cell);
         var amount_cell = date_cell.cloneNode(false);
         console.log(!transaction.amount);
@@ -354,15 +314,12 @@ function Table(appMod){
         var merchant_cell = date_cell.cloneNode(false);
         merchant_cell.innerHTML = transaction.merchant;
         row.appendChild(merchant_cell);
-        // var comment_cell = date_cell.cloneNode(false);
-        // comment_cell.innerHTML = transaction.comment;
-        // row.appendChild(comment_cell);
+        var comment_cell = date_cell.cloneNode(false);
+        comment_cell.innerHTML = transaction.comment;
+        row.appendChild(comment_cell);
     }
-    // functions loads response data received from
-    // ajax call to API into tables
-    // Parameters:
-    //      response -- object populated with transaction
-    //          objects
+    // functions that loads the data responses received from the ajax call into API into tables 
+
     function showSuccessConstructor(params, response){
         var transactions = response.transactionList;
         console.log(transactions);
@@ -371,39 +328,41 @@ function Table(appMod){
             var message = "No transactions to show.";
             console.log(params);
             if (params.startDate && params.endDate){
-                var startDate = appMod.readifyUTCDate(params.startDate);
-                var endDate = appMod.readifyUTCDate(params.endDate);
+                var startDate = appMod.UTCDate(params.startDate);
+                var endDate = appMod.UTCDate(params.endDate);
                 message = "No transactions in the period " + startDate + " – " + endDate + ".";
             }
             insertTableMessage("<p>" + message + "</p>");
         }
         transactions.forEach(addTransaction.bind(undefined, bodyElmt));
     }
-    var showMonthHandler = appMod.formHandler(showSuccessConstructor).bind(undefined, null);
-    var showMonthParams = currentMonthParams();
     
     // binds handler to click event on showMonth button
+
+    var showMonthHandler = appMod.formHandler(showSuccessConstructor).bind(undefined, null);
+    var showMonthParams = currentMonthParams();
     function showMonthButtonBehavior(){
         ajaxJSON("get_proxy.php", showMonthParams, showMonthHandler, dataLoading);
     }
+
     function configTable(){
         // attach event handler to see more and cancel buttons
         $([moreButtonElmt, cancelButtonElmt]).on("click", function (event){
             console.log(event.target);
             appMod.cancelAddButtonBehavior(formElmt);
         });
+
         // show the current month's transactions
         var formHandler = appMod.formHandler(showSuccessConstructor);
         // set handler for form submission that fetches user transactions
         form.ajaxifySubmit(formHandler, dataLoading);
         // configure the transactions display table
         $(showMonthButtonELmt).on("click", showMonthButtonBehavior);
-        //var currentMonth = currentMonthParams();
-        //var currentMonthHandler = formHandler.bind(undefined, currentMonth);
+
+        
         var allTransactionsHistory = all_TransactionsHistory();
         var allTransactionsHistoryHandler = formHandler.bind(undefined, allTransactionsHistory);
-        // on initial page load, get this month's transactions and display them
-        //ajaxJSON("get_proxy.php", currentMonth, currentMonthHandler, dataLoading);
+        // When page loads initially, get ALL transactions available and display them
         ajaxJSON("get_proxy.php", allTransactionsHistory, allTransactionsHistoryHandler, dataLoading);
     }
     return {
@@ -411,9 +370,8 @@ function Table(appMod){
     };
 }
 
-// Adder -- Module that encapsulates the portion
-//          of the application that adds transactions
-//          to a user's account
+// Adder Module --> adds transactions to a user's account
+
 function  Adder(appMod){
     var formElmt = document.getElementById("add_form");
     var addButtonElmt = document.getElementById("add_trans");
@@ -439,9 +397,8 @@ function  Adder(appMod){
 }
 
 
-// NavBar -- module that encapsulates the portion
-//      of the application that comprises and
-//      handles the navigation bar
+// NavBar module --> handles the navigation bar
+
 function NavBar(appMod){
     var navElmt = document.getElementsByTagName("nav")[0];
     var usernameElmt = document.getElementById("username");
@@ -459,9 +416,8 @@ function NavBar(appMod){
 }
 
 
-// Login -- module that encapsulates the portion of
-//          of the application that handles user
-//          authentication
+// Login module --> handles user authentication
+
 function Login(Transactions, NavBar, appMod){
     var containerElmt = document.getElementById("login_con");
     var formElmt = document.getElementById("login_form");
@@ -491,13 +447,13 @@ function Login(Transactions, NavBar, appMod){
     };
 }
 
-/////////////////////////////////////////////////
-// On DOM Ready Code ////////////////////////////
-/////////////////////////////////////////////////
+
+// DOM.Ready Code 
+
 
 $(document).ready(function (){
     var authToken = getCookieValue("authToken");
-    // load up modules
+    // loads the modules
     var apptools = appMod();
     var transactions = Transactions(Table(apptools), Adder(apptools));
     var navbar = NavBar(apptools);

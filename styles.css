@@ -108,7 +108,6 @@ button:hover, button:active {
 
 input {
     border: 1px solid #00a5d5;
-    /* padding: 3px; */
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -174,12 +173,12 @@ input {
 #table_con {
     height: 500px;
     background: #ffffff;
-    border: 1px solid #d50000;
+    border: 3px solid #d50000;
     overflow: hidden;
 }
 
 #trans_table {
-    height: 1000px;
+    height: 500px;
     width: 100%;
 }
 
@@ -262,36 +261,4 @@ input {
     vertical-align: middle;
     text-align: center;
 }
-/* Loading animations*/
 
-/* @-webkit-keyframes opacity {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-}
-@-moz-keyframes opacity {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-#loading {
-    text-align: center;
-}
-
-#loading span {
-    -webkit-animation-name: opacity;
-    -webkit-animation-duration: 1.5s;
-    -webkit-animation-iteration-count: infinite;
-    -moz-animation-name: opacity;
-    -moz-animation-duration: 1.5s;
-    -moz-animation-iteration-count: infinite;
-}
-
-#loading span:nth-child(2) {
-    -webkit-animation-delay: 200ms;
-    -moz-animation-delay: 200ms;
-}
-
-#loading span:nth-child(3) {
-    -webkit-animation-delay: 300ms;
-    -moz-animation-delay: 300ms;
-} */

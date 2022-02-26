@@ -17,9 +17,9 @@
                         <td>
                             <input required type="text" name="merchant" placeholder="Merchant" />
                         </td>
-                        <!-- <td>
+                        <td>
                             <input type="text" name="comment" placeholder="Details" />
-                        </td> -->
+                        </td>
                         <td>
                             <button type="submit" id="add_button">Add</button>
                             <button type="reset">Reset</button>
@@ -56,8 +56,14 @@
     </div>
     <div id="table_con">
         <table id="trans_table">
-            <thead><tr><th>Date</th><th>Amount</th><th>Merchant</th></tr></thead>
-            <!-- <th>Details</th> -->
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Merchant</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
             <tbody id="trans_body">
             </tbody>
         </table>
