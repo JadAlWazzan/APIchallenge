@@ -30,13 +30,16 @@ function proxyRequest($url){
 //Script body
 if ($_GET['command']){
     $qs = $_SERVER['QUERY_STRING'];
-    $api_url = "https://www.expensify.com/api?";
+    //enter api link bellow
+    $api_url = "https://www.enteryourapihere.test/api?";
     if ($_GET['command'] == "Authenticate"){
-        $partnerName = "applicant";
-        $partnerPassword = "d7c3119c6cdab02d68d9";
+        //enter partner name and password bellow
+        $partnerName = "test";
+        $partnerPassword = "test";
         $useExpensifyLogin = "false";
         $qs = $qs . "&partnerName=" . $partnerName . "&partnerPassword=" . $partnerPassword;
-        $qs = $qs . "&useExpensifyLogin=" . $useExpensifyLogin;
+        //change "test" to you api name
+        $qs = $qs . "&useTestLogin=" . $useTestLogin;
         $api_url = $api_url . $qs;
         proxyRequest($api_url);
     }
