@@ -27,7 +27,7 @@ session_start();
     </div>
 
     <div id="transactionTable">
-        <h1><strong>Transactions:</strong></h1>
+        <h1><strong class="hide">Transactions:</strong></h1>
         <table>
 
             <thead>
@@ -56,7 +56,7 @@ session_start();
     <div id="transactionForm">
         <!-- Add your create transaction form here -->
         <?php
-        require_once 'table.php';
+        
         ?>
        
     </div>
