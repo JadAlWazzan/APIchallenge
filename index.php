@@ -7,13 +7,13 @@ session_start();
 <head>
     <meta charset="UTF-8">
     
-    <title>Expensify Take-Home Challenge</title>
+    <title>Home Challenge</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <div id="header">
         <a id="title" href="/">
-            <h2><strong>Expensify</strong> - Expenses Made Easy</h2>
+            <h2><strong>API</strong> - Challenge </h2>
         </a>
         <nav class="hide">
             <span id="username"></span> | <button type="button" id="logout">Logout</button>
