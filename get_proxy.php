@@ -36,7 +36,8 @@ if ($_GET['command']){
         //enter partner name and password bellow
         $partnerName = "test";
         $partnerPassword = "test";
-        $useExpensifyLogin = "false";
+        //Change "Test" to your API name
+        $useTestLogin = "false";
         $qs = $qs . "&partnerName=" . $partnerName . "&partnerPassword=" . $partnerPassword;
         //change "test" to you api name
         $qs = $qs . "&useTestLogin=" . $useTestLogin;
