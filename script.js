@@ -1,6 +1,6 @@
-// Script for Expensify WebApp 
+// Script for TEST API WebApp 
 
-// A function that makes the ajax call to the expensify API
+// A function that makes the ajax call to an API
 
 function ajaxJSON(url, params, callback, before){
     $.ajax({
