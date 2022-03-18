@@ -26,8 +26,8 @@ session_start();
         ?>
     </div>
 
-    <div id="transactionTable">
-        <h1><strong class="hide">Transactions:</strong></h1>
+    <div class="hide" id="transactionTable">
+        <h1><strong>Transactions:</strong></h1>
         <table>
 
             <thead>
